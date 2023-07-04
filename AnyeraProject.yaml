@@ -1,0 +1,439 @@
+openapi: 3.0.3
+info:
+  title: AnyeraProject
+  version: 1.0.0
+  description: API for AnyeraAnimals
+  contact:
+    email: noti1996@gmail.com
+paths:
+  /api/v1/animals/:
+    get:
+      operationId: animals_list
+      parameters:
+      - in: query
+        name: kind_of_animal
+        schema:
+          type: string
+      tags:
+      - animals
+      security:
+      - jwtAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Animal'
+          description: ''
+  /api/v1/animals/{id}/:
+    get:
+      operationId: animals_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - animals
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Animal'
+          description: ''
+    put:
+      operationId: animals_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - animals
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AnimalRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/AnimalRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/AnimalRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Animal'
+          description: ''
+    patch:
+      operationId: animals_partial_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - animals
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedAnimalRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedAnimalRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedAnimalRequest'
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Animal'
+          description: ''
+    delete:
+      operationId: animals_destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - animals
+      security:
+      - jwtAuth: []
+      responses:
+        '204':
+          description: No response body
+  /api/v1/animals/create/:
+    post:
+      operationId: animals_create_create
+      tags:
+      - animals
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AnimalRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/AnimalRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/AnimalRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Animal'
+          description: ''
+  /api/v1/users/all/:
+    get:
+      operationId: users_all_list
+      tags:
+      - users
+      security:
+      - jwtAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Users'
+          description: ''
+  /api/v1/users/create/:
+    post:
+      operationId: users_create_create
+      tags:
+      - users
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserCreateRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/UserCreateRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/UserCreateRequest'
+        required: true
+      security:
+      - jwtAuth: []
+      - {}
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserCreate'
+          description: ''
+  /api/v1/users/login/:
+    post:
+      operationId: users_login_create
+      description: |-
+        Takes a set of user credentials and returns an access and refresh JSON web
+        token pair to prove the authentication of those credentials.
+      tags:
+      - users
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CustomTokenObtainPairRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/CustomTokenObtainPairRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/CustomTokenObtainPairRequest'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CustomTokenObtainPair'
+          description: ''
+  /api/v1/users/refresh/:
+    post:
+      operationId: users_refresh_create
+      description: |-
+        Takes a refresh type JSON web token and returns an access type JSON web
+        token if the refresh token is valid.
+      tags:
+      - users
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TokenRefreshRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/TokenRefreshRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/TokenRefreshRequest'
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TokenRefresh'
+          description: ''
+components:
+  schemas:
+    Animal:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        name:
+          type: string
+          title: Кличка питомца
+          maxLength: 100
+        age:
+          type: integer
+          maximum: 2147483647
+          minimum: 1
+          title: Возраст питомца
+        kind_of_animal:
+          type: string
+          title: Вид питомца
+          maxLength: 255
+        photo:
+          type: string
+          format: uri
+          title: Фото питомца
+      required:
+      - age
+      - id
+      - kind_of_animal
+      - name
+    AnimalRequest:
+      type: object
+      properties:
+        name:
+          type: string
+          minLength: 1
+          title: Кличка питомца
+          maxLength: 100
+        age:
+          type: integer
+          maximum: 2147483647
+          minimum: 1
+          title: Возраст питомца
+        kind_of_animal:
+          type: string
+          minLength: 1
+          title: Вид питомца
+          maxLength: 255
+        photo:
+          type: string
+          format: binary
+          title: Фото питомца
+      required:
+      - age
+      - kind_of_animal
+      - name
+    CustomTokenObtainPair:
+      type: object
+      properties:
+        username:
+          type: string
+      required:
+      - username
+    CustomTokenObtainPairRequest:
+      type: object
+      properties:
+        username:
+          type: string
+          minLength: 1
+        password:
+          type: string
+          writeOnly: true
+          minLength: 1
+      required:
+      - password
+      - username
+    PatchedAnimalRequest:
+      type: object
+      properties:
+        name:
+          type: string
+          minLength: 1
+          title: Кличка питомца
+          maxLength: 100
+        age:
+          type: integer
+          maximum: 2147483647
+          minimum: 1
+          title: Возраст питомца
+        kind_of_animal:
+          type: string
+          minLength: 1
+          title: Вид питомца
+          maxLength: 255
+        photo:
+          type: string
+          format: binary
+          title: Фото питомца
+    TokenRefresh:
+      type: object
+      properties:
+        access:
+          type: string
+          readOnly: true
+      required:
+      - access
+    TokenRefreshRequest:
+      type: object
+      properties:
+        refresh:
+          type: string
+          writeOnly: true
+          minLength: 1
+      required:
+      - refresh
+    UserCreate:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        username:
+          type: string
+          title: Имя пользователя
+          description: Введите имя пользователя
+          maxLength: 50
+        first_name:
+          type: string
+          title: Имя пользователя
+          description: Введите имя пользователя
+          maxLength: 75
+        last_name:
+          type: string
+          title: Фамилия пользователя
+          description: Введите фамилию пользователя
+          maxLength: 100
+      required:
+      - id
+      - username
+    UserCreateRequest:
+      type: object
+      properties:
+        username:
+          type: string
+          minLength: 1
+          title: Имя пользователя
+          description: Введите имя пользователя
+          maxLength: 50
+        first_name:
+          type: string
+          title: Имя пользователя
+          description: Введите имя пользователя
+          maxLength: 75
+        last_name:
+          type: string
+          title: Фамилия пользователя
+          description: Введите фамилию пользователя
+          maxLength: 100
+        password:
+          type: string
+          writeOnly: true
+          minLength: 1
+      required:
+      - password
+      - username
+    Users:
+      type: object
+      properties:
+        username:
+          type: string
+          title: Имя пользователя
+          description: Введите имя пользователя
+          maxLength: 50
+        email:
+          type: string
+          format: email
+          maxLength: 254
+        animals:
+          type: array
+          items:
+            $ref: '#/components/schemas/Animal'
+          readOnly: true
+      required:
+      - animals
+      - username
+  securitySchemes:
+    jwtAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
