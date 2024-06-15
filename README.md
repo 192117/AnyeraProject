@@ -1,7 +1,5 @@
 # REST API для Anyera Digital & Design.
 
-[Тестовое задание](https://docs.google.com/document/d/1OSgG7qUW1Rm_5VEc5BEZqSnJHa-_10AvA1vnmU2RBZE/edit?usp=sharing)
-
 ## Установка
 
 Перед началом установки убедитесь, что у вас установлен Python 3.11 и Poetry (пакетный менеджер для Python).
